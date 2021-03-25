@@ -23,7 +23,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "uavcan.h"
+#include "i2c_manager.h"
+#include "sensors.h"
+#include "sq_timers.h"
+#include "system_monitor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -113,7 +117,7 @@ int main(void)
   MX_I2C1_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-
+  sensorsInit();
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -140,6 +144,7 @@ int main(void)
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
+  sensorsBeginThreads();
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
@@ -324,7 +329,7 @@ static void MX_TIM1_Init(void)
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
   sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
   {
     Error_Handler();
   }
@@ -487,10 +492,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_Pin|SS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, SPARK_ENABLE_Pin|LED_Pin|STARTER_DISABLE_Pin|SS_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LED_Pin SS_Pin */
-  GPIO_InitStruct.Pin = LED_Pin|SS_Pin;
+  /*Configure GPIO pins : SPARK_ENABLE_Pin LED_Pin SS_Pin */
+  GPIO_InitStruct.Pin = SPARK_ENABLE_Pin|LED_Pin|SS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -500,6 +505,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : STARTER_DISABLE_Pin */
+  GPIO_InitStruct.Pin = STARTER_DISABLE_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(STARTER_DISABLE_GPIO_Port, &GPIO_InitStruct);
 
 }
 
@@ -517,10 +529,13 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
+  i2cManagerInit();
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    i2cManagerSpin();
+    uavcanProcess();
+//    sysMonitorProcess();
   }
   /* USER CODE END 5 */
 }

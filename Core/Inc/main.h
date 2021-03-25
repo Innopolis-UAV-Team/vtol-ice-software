@@ -60,8 +60,12 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define SPARK_ENABLE_Pin GPIO_PIN_1
+#define SPARK_ENABLE_GPIO_Port GPIOA
 #define LED_Pin GPIO_PIN_4
 #define LED_GPIO_Port GPIOA
+#define STARTER_DISABLE_Pin GPIO_PIN_8
+#define STARTER_DISABLE_GPIO_Port GPIOA
 #define SS_Pin GPIO_PIN_15
 #define SS_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
