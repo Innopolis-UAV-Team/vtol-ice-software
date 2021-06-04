@@ -64,10 +64,14 @@ void Error_Handler(void);
 #define SPARK_ENABLE_GPIO_Port GPIOA
 #define LED_Pin GPIO_PIN_4
 #define LED_GPIO_Port GPIOA
+#define TEST_OPEN_DRAIN_Pin GPIO_PIN_7
+#define TEST_OPEN_DRAIN_GPIO_Port GPIOA
+#define ADC_SHUNT_CURRENT_Pin GPIO_PIN_0
+#define ADC_SHUNT_CURRENT_GPIO_Port GPIOB
+#define ADC_VOUT_Pin GPIO_PIN_1
+#define ADC_VOUT_GPIO_Port GPIOB
 #define STARTER_DISABLE_Pin GPIO_PIN_8
 #define STARTER_DISABLE_GPIO_Port GPIOA
-#define SS_Pin GPIO_PIN_15
-#define SS_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
