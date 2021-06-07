@@ -244,7 +244,7 @@ static void MX_ADC1_Init(void)
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 2;
+  hadc1.Init.NbrOfConversion = 4;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
     Error_Handler();
@@ -262,6 +262,23 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_8;
   sConfig.Rank = ADC_REGULAR_RANK_2;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_5;
+  sConfig.Rank = ADC_REGULAR_RANK_3;
+  sConfig.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_7;
+  sConfig.Rank = ADC_REGULAR_RANK_4;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -575,7 +592,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, SPARK_ENABLE_Pin|LED_Pin|TEST_OPEN_DRAIN_Pin|STARTER_DISABLE_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, SPARK_ENABLE_Pin|LED_Pin|STARTER_DISABLE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : SPARK_ENABLE_Pin LED_Pin STARTER_DISABLE_Pin */
   GPIO_InitStruct.Pin = SPARK_ENABLE_Pin|LED_Pin|STARTER_DISABLE_Pin;
@@ -583,13 +600,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : TEST_OPEN_DRAIN_Pin */
-  GPIO_InitStruct.Pin = TEST_OPEN_DRAIN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(TEST_OPEN_DRAIN_GPIO_Port, &GPIO_InitStruct);
 
 }
 
@@ -613,7 +623,7 @@ void StartDefaultTask(void *argument)
   {
     i2cManagerSpin();
     uavcanProcess();
-//    sysMonitorProcess();
+    sysMonitorProcess();
   }
   /* USER CODE END 5 */
 }
