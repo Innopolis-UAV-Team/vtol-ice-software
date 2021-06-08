@@ -585,12 +585,19 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, SPARK_ENABLE_Pin|LED_Pin|STARTER_DISABLE_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : SPARK_ENABLE_Pin LED_Pin STARTER_DISABLE_Pin */
-  GPIO_InitStruct.Pin = SPARK_ENABLE_Pin|LED_Pin|STARTER_DISABLE_Pin;
+  /*Configure GPIO pins : SPARK_ENABLE_Pin LED_Pin */
+  GPIO_InitStruct.Pin = SPARK_ENABLE_Pin|LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : STARTER_DISABLE_Pin */
+  GPIO_InitStruct.Pin = STARTER_DISABLE_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(STARTER_DISABLE_GPIO_Port, &GPIO_InitStruct);
 
 }
 
