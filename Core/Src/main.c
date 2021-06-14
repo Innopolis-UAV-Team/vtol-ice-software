@@ -25,7 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "uavcan.h"
 #include "i2c_manager.h"
-#include "drivers.h"
+#include "modules.h"
 #include "sq_timers.h"
 #include "system_monitor.h"
 /* USER CODE END Includes */
@@ -124,7 +124,7 @@ int main(void)
   MX_TIM1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  driversInit();
+  modulesInit();
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -151,8 +151,7 @@ int main(void)
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  driversBeginThreads();
-  /* add threads, ... */
+  modulesBeginThreads();
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
