@@ -24,7 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "uavcan.h"
-#include "i2c_manager.h"
+// #include "i2c_manager.h"
 #include "modules.h"
 #include "sq_timers.h"
 #include "system_monitor.h"
@@ -596,11 +596,11 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
-  i2cManagerInit();
+  // i2cManagerInit();
   /* Infinite loop */
   for(;;)
   {
-    i2cManagerSpin();
+    // i2cManagerSpin();
     uavcanProcess();
     sysMonitorProcess();
   }
