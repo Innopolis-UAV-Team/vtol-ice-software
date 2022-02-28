@@ -526,10 +526,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, SPARK_ENABLE_Pin|LED_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(STARTER_ENABLE_GPIO_Port, STARTER_ENABLE_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, SPARK_ENABLE_Pin|LED_Pin|STARTER_ENABLE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : SPARK_ENABLE_Pin LED_Pin */
   GPIO_InitStruct.Pin = SPARK_ENABLE_Pin|LED_Pin;
