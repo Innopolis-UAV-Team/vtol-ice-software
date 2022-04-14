@@ -70,6 +70,10 @@ void Error_Handler(void);
 #define ADC_SHUNT_CURRENT_GPIO_Port GPIOB
 #define ADC_VOUT_Pin GPIO_PIN_1
 #define ADC_VOUT_GPIO_Port GPIOB
+#define STARTER_ENABLE_2_Pin GPIO_PIN_6
+#define STARTER_ENABLE_2_GPIO_Port GPIOB
+#define STARTER_ENABLE_3_Pin GPIO_PIN_7
+#define STARTER_ENABLE_3_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
