@@ -1,3 +1,5 @@
+
+  
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -28,6 +30,7 @@
 #include "modules.h"
 #include "sq_timers.h"
 #include "system_monitor.h"
+#include "tachometer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -555,7 +558,12 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+/**
+  * @brief Input capture callback
+  */
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef* htim){
+  tachometerHandleCapture(htim);
+}
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -568,11 +576,9 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
-  i2cManagerInit();
   /* Infinite loop */
   for(;;)
   {
-    i2cManagerSpin();
     uavcanProcess();
     sysMonitorProcess();
   }
@@ -596,7 +602,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-  timerUploadCallback(htim);
+  tachometerHandleOverflow(htim);
   /* USER CODE END Callback 1 */
 }
 
