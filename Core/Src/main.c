@@ -576,7 +576,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef* htim){
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
-  /* Infinite loop */
+  sysMonitorInit();
   for(;;)
   {
     uavcanProcess();
