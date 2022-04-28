@@ -1,5 +1,3 @@
-
-  
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -8,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -28,9 +25,7 @@
 #include "uavcan.h"
 #include "i2c_manager.h"
 #include "modules.h"
-#include "sq_timers.h"
 #include "system_monitor.h"
-#include "tachometer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,8 +56,8 @@ TIM_HandleTypeDef htim4;
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
+  .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityNormal,
-  .stack_size = 256 * 4
 };
 /* USER CODE BEGIN PV */
 
@@ -75,8 +70,8 @@ static void MX_DMA_Init(void);
 static void MX_CAN_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM4_Init(void);
-static void MX_TIM1_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_TIM1_Init(void);
 void StartDefaultTask(void *argument);
 
 /* USER CODE BEGIN PFP */
@@ -120,8 +115,8 @@ int main(void)
   MX_CAN_Init();
   MX_TIM2_Init();
   MX_TIM4_Init();
-  MX_TIM1_Init();
   MX_ADC1_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
   modulesInit();
   /* USER CODE END 2 */
@@ -242,14 +237,14 @@ static void MX_ADC1_Init(void)
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 3;
+  hadc1.Init.NbrOfConversion = 4;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
     Error_Handler();
   }
   /** Configure Regular Channel
   */
-  sConfig.Channel = ADC_CHANNEL_9;
+  sConfig.Channel = ADC_CHANNEL_5;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
@@ -258,7 +253,7 @@ static void MX_ADC1_Init(void)
   }
   /** Configure Regular Channel
   */
-  sConfig.Channel = ADC_CHANNEL_8;
+  sConfig.Channel = ADC_CHANNEL_7;
   sConfig.Rank = ADC_REGULAR_RANK_2;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
@@ -266,8 +261,16 @@ static void MX_ADC1_Init(void)
   }
   /** Configure Regular Channel
   */
-  sConfig.Channel = ADC_CHANNEL_5;
+  sConfig.Channel = ADC_CHANNEL_8;
   sConfig.Rank = ADC_REGULAR_RANK_3;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_9;
+  sConfig.Rank = ADC_REGULAR_RANK_4;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -336,7 +339,7 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 1 */
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 72;
+  htim1.Init.Prescaler = 71;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim1.Init.Period = 20000;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -435,14 +438,9 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
-  sConfigIC.ICSelection = TIM_ICSELECTION_INDIRECTTI;
+  sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
   sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
   sConfigIC.ICFilter = 0;
-  if (HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
   if (HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_4) != HAL_OK)
   {
     Error_Handler();
@@ -472,7 +470,7 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 72;
+  htim4.Init.Prescaler = 71;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim4.Init.Period = 20000;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -529,16 +527,19 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, SPARK_ENABLE_Pin|LED_Pin|STARTER_ENABLE_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, SPARK_ENABLE_Pin|INTERNAL_LED_1_Pin|STARTER_ENABLE_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, STARTER_ENABLE_2_Pin|STARTER_ENABLE_3_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pins : SPARK_ENABLE_Pin LED_Pin */
-  GPIO_InitStruct.Pin = SPARK_ENABLE_Pin|LED_Pin;
+  /*Configure GPIO pins : SPARK_ENABLE_Pin INTERNAL_LED_1_Pin */
+  GPIO_InitStruct.Pin = SPARK_ENABLE_Pin|INTERNAL_LED_1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PA2 */
+  GPIO_InitStruct.Pin = GPIO_PIN_2;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : STARTER_ENABLE_Pin */
@@ -548,22 +549,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(STARTER_ENABLE_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : STARTER_ENABLE_2_Pin STARTER_ENABLE_3_Pin */
-  GPIO_InitStruct.Pin = STARTER_ENABLE_2_Pin|STARTER_ENABLE_3_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
 }
 
 /* USER CODE BEGIN 4 */
-/**
-  * @brief Input capture callback
-  */
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef* htim){
-  tachometerHandleCapture(htim);
-}
+
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -579,13 +568,14 @@ void StartDefaultTask(void *argument)
   sysMonitorInit();
   for(;;)
   {
+    i2cManagerSpin();
     uavcanProcess();
     sysMonitorProcess();
   }
   /* USER CODE END 5 */
 }
 
- /**
+/**
   * @brief  Period elapsed callback in non blocking mode
   * @note   This function is called  when TIM3 interrupt took place, inside
   * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
@@ -602,7 +592,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-  tachometerHandleOverflow(htim);
+
   /* USER CODE END Callback 1 */
 }
 
@@ -638,4 +628,3 @@ void assert_failed(uint8_t *file, uint32_t line)
 }
 #endif /* USE_FULL_ASSERT */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
