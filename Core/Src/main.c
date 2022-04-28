@@ -25,6 +25,7 @@
 #include "uavcan.h"
 #include "i2c_manager.h"
 #include "modules.h"
+#include "tachometer.h"
 #include "system_monitor.h"
 /* USER CODE END Includes */
 
@@ -552,7 +553,12 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+/**
+  * @brief Input capture callback
+  */
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef* htim){
+  tachometerHandleCapture(htim);
+}
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -592,7 +598,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-
+  tachometerHandleOverflow(htim);
   /* USER CODE END Callback 1 */
 }
 
