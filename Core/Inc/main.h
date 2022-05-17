@@ -75,6 +75,8 @@ void Error_Handler(void);
 #define ADC_VOUT_GPIO_Port GPIOB
 #define STARTER_ENABLE_Pin GPIO_PIN_8
 #define STARTER_ENABLE_GPIO_Port GPIOA
+#define AIR_THROTTLE_Pin GPIO_PIN_9
+#define AIR_THROTTLE_GPIO_Port GPIOA
 #define GAS_THROTTLE_Pin GPIO_PIN_10
 #define GAS_THROTTLE_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
