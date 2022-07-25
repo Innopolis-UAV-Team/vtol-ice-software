@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "uavcan.h"
+#include "uavcan_threadsafe.h"
 #include "i2c_manager.h"
 #include "modules.h"
 #include "tachometer.h"
