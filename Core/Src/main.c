@@ -22,8 +22,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "uavcan_threadsafe.h"
-#include "i2c_manager.h"
 #include "modules.h"
 #include "tachometer.h"
 #include "system_monitor.h"
@@ -575,13 +573,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef* htim){
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
-  sysMonitorInit();
-  for(;;)
-  {
-    i2cManagerSpin();
-    uavcanProcess();
-    sysMonitorProcess();
-  }
+  StartSysMonitorTask(true);
   /* USER CODE END 5 */
 }
 
