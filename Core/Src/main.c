@@ -24,7 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "modules.h"
 #include "tachometer.h"
-#include "system_monitor.h"
+#include "system_monitor/system_monitor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
