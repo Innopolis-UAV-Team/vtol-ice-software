@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "modules.h"
+#include "application.h"
 #include "tachometer.h"
 #include "system_monitor/system_monitor.h"
 /* USER CODE END Includes */
@@ -117,7 +117,7 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-  modulesInit();
+  applicationInitBeforeRTOS();
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -144,7 +144,7 @@ int main(void)
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  modulesBeginThreads();
+  applicationBeginThreads();
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
