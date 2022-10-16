@@ -573,7 +573,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef* htim){
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
-  StartSysMonitorTask(true);
+  SysMonitorEnableI2C();
+  StartSysMonitorTask(NULL);
   /* USER CODE END 5 */
 }
 
