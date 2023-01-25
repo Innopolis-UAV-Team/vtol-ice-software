@@ -23,7 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "application.h"
-#include "tachometer.h"
+#include "ice/tachometer.h"
 #include "system_monitor/system_monitor.h"
 /* USER CODE END Includes */
 
