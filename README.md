@@ -1,4 +1,4 @@
-## VTOL ICE node STM32CubeMX generated project
+## VTOL ICE
 
 The project has the following pinout configuration:
 
