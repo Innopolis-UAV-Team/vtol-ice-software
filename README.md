@@ -1,5 +1,5 @@
-## VTOL ICE
+## VTOL ICE v0
 
-The project has the following pinout configuration:
+The peripheral configuration is shown below:
 
 <img src="Assets/stm32cubemx.png" alt="drawing">

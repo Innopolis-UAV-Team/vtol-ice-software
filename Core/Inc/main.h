@@ -61,6 +61,8 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define SPARK_ENABLE_Pin GPIO_PIN_1
 #define SPARK_ENABLE_GPIO_Port GPIOA
+#define ADC_EXT_TEMP_Pin GPIO_PIN_2
+#define ADC_EXT_TEMP_GPIO_Port GPIOA
 #define RPM_IN_Pin GPIO_PIN_3
 #define RPM_IN_GPIO_Port GPIOA
 #define INTERNAL_LED_1_Pin GPIO_PIN_4
