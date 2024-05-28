@@ -69,18 +69,21 @@ void Error_Handler(void);
 #define INTERNAL_LED_1_GPIO_Port GPIOA
 #define ADC_VIN_Pin GPIO_PIN_5
 #define ADC_VIN_GPIO_Port GPIOA
+#define ADC_VOUT_Pin GPIO_PIN_6
+#define ADC_VOUT_GPIO_Port GPIOA
 #define ADC_5V_Pin GPIO_PIN_7
 #define ADC_5V_GPIO_Port GPIOA
 #define ADC_CRNT_Pin GPIO_PIN_0
 #define ADC_CRNT_GPIO_Port GPIOB
-#define ADC_VOUT_Pin GPIO_PIN_1
-#define ADC_VOUT_GPIO_Port GPIOB
+#define ADC_VERSION_Pin GPIO_PIN_1
+#define ADC_VERSION_GPIO_Port GPIOB
 #define STARTER_ENABLE_Pin GPIO_PIN_8
 #define STARTER_ENABLE_GPIO_Port GPIOA
 #define AIR_THROTTLE_Pin GPIO_PIN_9
 #define AIR_THROTTLE_GPIO_Port GPIOA
 #define GAS_THROTTLE_Pin GPIO_PIN_10
 #define GAS_THROTTLE_GPIO_Port GPIOA
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
